@@ -1,54 +1,45 @@
-pef
-===
-
-.. image:: https://img.shields.io/pypi/l/pef.svg
-    :target: https://pypi.python.org/pypi/pef
-
-.. image:: https://img.shields.io/pypi/v/pef.svg
-    :target: https://pypi.python.org/pypi/pef
-
-.. image:: https://img.shields.io/pypi/pyversions/pef.svg
-    :target: https://pypi.python.org/pypi/pef
+pippurge
+==========
 
 Enhancement for pip uninstall command, that it removes all dependencies of an uninstalled package.
 
-.. image:: https://asciinema.org/a/YlzQlq8TSaIs9NcVA9r9uN07L.png
-    :target: https://asciinema.org/a/YlzQlq8TSaIs9NcVA9r9uN07L
-
-☤ Quickstart
+Quickstart
 ------------
 
-Uninstall package, e.g, qu:
+Uninstall package, e.g, flask:
 
 ::
 
-    $ pef qu -y
+    $ pippurge flask -y
 
-Uninstall multiple packages, e.g, qu, gy:
+Uninstall multiple packages, e.g, flask, requests:
 
 ::
 
-    $ pef qu gy -y
+    $ pippurge flask requests -y
 
-☤ Installation
+Installation
 --------------
 
-You can install "pef" via pip from `PyPI <https://pypi.python.org/pypi/pef>`_:
+You can install "pippurge" via pip from `PyPI <https://pypi.python.org/pypi/pippurge>`_:
 
 ::
 
-    $ pip install pef
+    $ pip install pippurge
 	
-☤ Usage
+Usage
 -------
 
 ::
 
-    $ pef --help
-    Usage: pef [OPTIONS] [PACKAGES]...
+    $ pippurge --help
+    usage: pippurge [-h] [-y] packages [packages ...]
 
-      Uninstall packages with all its dependencies.
+    Uninstall packages with all its dependencies.
 
-    Options:
-      -y, --yes  Don't ask for confirmation of uninstall deletions.
-      --help     Show this message and exit.
+    positional arguments:
+      packages    some packages
+
+    optional arguments:
+      -h, --help  show this help message and exit
+      -y, --yes   don't ask for confirmation of uninstall deletions.

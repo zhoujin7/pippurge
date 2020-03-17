@@ -1,13 +1,12 @@
 # coding: utf8
 
 """
-    pef uninstall pip-installed package with all its dependencies.
+    pippurge uninstall pip-installed package with all its dependencies.
 """
-
-import sys
+import argparse
 import subprocess
+import sys
 
-import click
 import pkg_resources
 
 _ver = sys.version_info
@@ -88,33 +87,25 @@ class DistInfo(object):
                 self.kp.remove(node)
 
 
-@click.command()
-@click.argument('packages', nargs=-1)
-@click.option('-y', '--yes', is_flag=True, help="Don't ask for confirmation of uninstall deletions.")
 def cli(packages, yes):
-    """Uninstall packages with all its dependencies."""
     if not _is_venv():
-        click.secho(
-            click.style("Warning! You are not in an active virtual environment. This may purge system-level packages!",
-                        fg='red'))
+        print('Warning! You are not in an active virtual environment. This may purge system-level packages!')
         sys.exit(1)
     if not packages:
-        click.secho(click.style("Packages can't be empty, please run `pef --help` for more details.", fg='yellow'))
+        print("Packages can't be empty, please run `pippurge --help` for more details.")
         sys.exit(0)
     prune = []
     pkg = pkg_resources.working_set
     df = DistInfo(pkg)
     for p in packages:
         if p not in df.keys:
-            click.secho(click.style('Cannot uninstall requirement {0}, not installed.'.format(p), fg='yellow'))
+            print('Cannot uninstall requirement {0}, not installed.'.format(p))
             continue
         df.purge(_encode(p))
         prune.extend(df.rm)
 
     if df.kp:
-        click.secho(click.style(
-            'Module {0} is referenced by more than one other modules, to remain unchanged.'.format(', '.join(df.kp)),
-            fg='yellow'))
+        print('Module {0} is referenced by more than one other modules, to remain unchanged.'.format(', '.join(df.kp)))
     if prune:
         cmd = [sys.executable, '-m', 'pip', 'uninstall']
         if yes:
@@ -123,5 +114,15 @@ def cli(packages, yes):
         subprocess.check_call(cmd)
 
 
+def main():
+    parser = argparse.ArgumentParser(description='Uninstall packages with all its dependencies.')
+    parser.add_argument('packages', metavar='packages', type=str, nargs='+', help="some packages")
+    parser.add_argument('-y', '--yes', dest='yes', action='store_true',
+                        help="don't ask for confirmation of uninstall deletions.")
+    packages = parser.parse_args().packages
+    yes = parser.parse_args().yes
+    cli(packages, yes)
+
+
 if __name__ == '__main__':
-    cli()
+    main()
